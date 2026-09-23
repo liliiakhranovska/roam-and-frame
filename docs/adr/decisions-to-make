@@ -1,0 +1,8 @@
+- timeout, retry policy, or circuit breaker for any synchronous call
+  in the system - whether it's an in-process module call (like Checkout
+  Orchestrator → Inventory Service) or a synchronous outbound call to an 
+  external provider (like Payment Gateway or Shipping Provider). As architected 
+  today, a slow call anywhere in a synchronous chain can hold the calling 
+  request open indefinitely
+ - how to make repeated order placement safe? (idempotency, duplicate detection, etc.)
+ - failure recovery

@@ -1,0 +1,13 @@
+dependencies {
+	implementation project(':applications:core-api-application:shared')
+	implementation project(':applications:core-api-application:modules:cart')
+	implementation project(':applications:core-api-application:modules:inventory')
+	implementation project(':applications:core-api-application:modules:payment')
+	implementation project(':applications:core-api-application:modules:order')
+	implementation project(':applications:core-api-application:modules:shipping')
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+}

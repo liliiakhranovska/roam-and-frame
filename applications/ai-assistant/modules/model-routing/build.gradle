@@ -1,0 +1,6 @@
+dependencies {
+	implementation project(':applications:ai-assistant:shared')
+
+	// TODO: add Spring AI Anthropic client + local model-serving runtime client starters
+	// once the Model Router / Local LLM Client / Claude Client adapters are implemented.
+}

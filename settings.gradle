@@ -1,1 +1,20 @@
-rootProject.name = 'demo'
+rootProject.name = 'roam-and-frame'
+
+include(
+	'applications:core-api-application:bootstrap',
+	'applications:core-api-application:shared',
+	'applications:core-api-application:modules:catalog',
+	'applications:core-api-application:modules:cart',
+	'applications:core-api-application:modules:customer',
+	'applications:core-api-application:modules:inventory',
+	'applications:core-api-application:modules:order',
+	'applications:core-api-application:modules:payment',
+	'applications:core-api-application:modules:shipping',
+	'applications:core-api-application:modules:notification',
+	'applications:core-api-application:modules:checkout',
+	'applications:ai-assistant:bootstrap',
+	'applications:ai-assistant:shared',
+	'applications:ai-assistant:modules:chat',
+	'applications:ai-assistant:modules:model-routing',
+	'applications:ai-assistant:modules:mcp-client',
+)

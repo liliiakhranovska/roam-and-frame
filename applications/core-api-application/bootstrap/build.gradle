@@ -1,0 +1,19 @@
+plugins {
+	id 'org.springframework.boot'
+}
+
+dependencies {
+	implementation project(':applications:core-api-application:shared')
+	implementation project(':applications:core-api-application:modules:catalog')
+	implementation project(':applications:core-api-application:modules:cart')
+	implementation project(':applications:core-api-application:modules:customer')
+	implementation project(':applications:core-api-application:modules:inventory')
+	implementation project(':applications:core-api-application:modules:order')
+	implementation project(':applications:core-api-application:modules:payment')
+	implementation project(':applications:core-api-application:modules:shipping')
+	implementation project(':applications:core-api-application:modules:notification')
+	implementation project(':applications:core-api-application:modules:checkout')
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	runtimeOnly 'org.postgresql:postgresql'
+}

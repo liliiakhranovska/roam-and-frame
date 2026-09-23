@@ -1,0 +1,6 @@
+dependencies {
+	implementation project(':applications:core-api-application:shared')
+	implementation project(':applications:core-api-application:modules:customer')
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+}

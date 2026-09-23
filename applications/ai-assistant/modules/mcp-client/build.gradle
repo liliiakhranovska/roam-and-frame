@@ -1,0 +1,6 @@
+dependencies {
+	implementation project(':applications:ai-assistant:shared')
+
+	// TODO: add the Spring AI MCP client starter once tool discovery/invocation
+	// against the Core API Application's MCP tool adapters is implemented.
+}
