@@ -16,4 +16,10 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	runtimeOnly 'org.postgresql:postgresql'
+	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+}
+
+tasks.named('bootRun') {
+	workingDir = rootProject.projectDir
+	jvmArgs '-Duser.timezone=UTC'
 }
