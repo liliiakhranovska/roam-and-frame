@@ -9,7 +9,7 @@
   colima start --cpu 2 --memory 3
   ```
 
-## IntelliJ run configuration (`CoreApiApplication`)
+## IntelliJ run configuration (`Application`)
 
 - **Working directory: `$PROJECT_DIR$`** - Spring looks for `compose.yaml` in the working directory,
   and it lives in the repo root
@@ -18,7 +18,7 @@
 ## Local start
 
 1. `colima start` - starts the Docker engine (needed once per session / after reboot)
-2. Run `CoreApiApplication` in IntelliJ - Spring Boot Docker Compose support runs `docker compose up`
+2. Run `Application` in IntelliJ - Spring Boot Docker Compose support runs `docker compose up`
    for `compose.yaml`, waits for Postgres, and configures the datasource automatically
 3. Check: `curl localhost:8080/actuator/health` → `{"status":"UP"}` (includes a DB check)
 
