@@ -14,6 +14,7 @@
 - **Working directory: `$PROJECT_DIR$`** - Spring looks for `compose.yaml` in the working directory,
   and it lives in the repo root
 - **VM options: `-Duser.timezone=UTC`**
+- **Env variables: specify JWT_SECRET**
 
 ## Local start
 
@@ -38,3 +39,5 @@ Useful commands (run from the repo root):
 - `docker compose ps` - is the container running?
 - `docker compose logs postgres` - Postgres logs, first place to look when the app can't connect
 - `docker compose down` - stop the container (data kept); `down -v` also deletes the data volume
+- `docker compose exec postgres psql -U roamandframe -d roamandframe` - connect to the running container
+
