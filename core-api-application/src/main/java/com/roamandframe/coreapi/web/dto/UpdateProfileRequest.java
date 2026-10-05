@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.api.dto;
+package com.roamandframe.coreapi.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

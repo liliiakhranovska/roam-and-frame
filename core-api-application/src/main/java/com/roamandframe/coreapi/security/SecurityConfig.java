@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.api.security;
+package com.roamandframe.coreapi.security;
 
 import io.jsonwebtoken.io.Decoders;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,14 +1,14 @@
-package com.roamandframe.coreapi.api;
+package com.roamandframe.coreapi.web;
 
-import com.roamandframe.coreapi.api.dto.AuthenticationRequest;
-import com.roamandframe.coreapi.api.dto.AuthenticationResponse;
-import com.roamandframe.coreapi.api.dto.ProfileResponse;
-import com.roamandframe.coreapi.api.dto.UpdateProfileRequest;
-import com.roamandframe.coreapi.api.security.TokenIssuer;
+import com.roamandframe.coreapi.security.TokenIssuer;
 import com.roamandframe.coreapi.customer.model.Customer;
 import com.roamandframe.coreapi.customer.model.UpdateProfileCommand;
 import com.roamandframe.coreapi.customer.service.CustomerAuthenticationService;
 import com.roamandframe.coreapi.customer.service.CustomerProfileService;
+import com.roamandframe.coreapi.web.dto.AuthenticationRequest;
+import com.roamandframe.coreapi.web.dto.AuthenticationResponse;
+import com.roamandframe.coreapi.web.dto.ProfileResponse;
+import com.roamandframe.coreapi.web.dto.UpdateProfileRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

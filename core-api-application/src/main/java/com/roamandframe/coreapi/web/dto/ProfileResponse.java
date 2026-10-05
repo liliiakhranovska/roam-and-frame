@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.api.dto;
+package com.roamandframe.coreapi.web.dto;
 
 import com.roamandframe.coreapi.customer.model.CustomerProfile;
 

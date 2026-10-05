@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.api.security;
+package com.roamandframe.coreapi.security;
 
 import com.roamandframe.coreapi.customer.model.Customer;
 

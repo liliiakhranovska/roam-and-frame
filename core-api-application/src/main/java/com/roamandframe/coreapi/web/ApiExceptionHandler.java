@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.api;
+package com.roamandframe.coreapi.web;
 
 import com.roamandframe.coreapi.customer.exception.CustomerNotFoundException;
 import com.roamandframe.coreapi.customer.exception.InvalidCredentialsException;
