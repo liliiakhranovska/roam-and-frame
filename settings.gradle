@@ -1,14 +1,1 @@
 rootProject.name = 'roam-and-frame'
-
-include(
-	'core-api-application',
-	'core-api-application:modules:catalog',
-	'core-api-application:modules:cart',
-	'core-api-application:modules:customer',
-	'core-api-application:modules:inventory',
-	'core-api-application:modules:order',
-	'core-api-application:modules:payment',
-	'core-api-application:modules:shipping',
-	'core-api-application:modules:notification',
-	'core-api-application:modules:checkout'
-)
