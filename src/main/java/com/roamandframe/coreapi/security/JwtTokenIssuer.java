@@ -1,6 +1,5 @@
 package com.roamandframe.coreapi.security;
 
-import com.roamandframe.coreapi.modules.customer.model.Customer;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,6 +10,7 @@ import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 class JwtTokenIssuer implements TokenIssuer {
@@ -25,11 +25,11 @@ class JwtTokenIssuer implements TokenIssuer {
     }
 
     @Override
-    public String issueToken(Customer customer) {
+    public String issueToken(UUID customerId, String email) {
         Instant now = Instant.now();
         return Jwts.builder()
-                .subject(customer.id().toString())
-                .claim("email", customer.email())
+                .subject(customerId.toString())
+                .claim("email", email)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(expirationMinutes, ChronoUnit.MINUTES)))
                 .signWith(key)

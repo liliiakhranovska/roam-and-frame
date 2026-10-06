@@ -1,7 +1,7 @@
 package com.roamandframe.coreapi.web;
 
 import com.roamandframe.coreapi.modules.customer.exception.CustomerNotFoundException;
-import com.roamandframe.coreapi.modules.customer.exception.InvalidCredentialsException;
+import com.roamandframe.coreapi.security.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

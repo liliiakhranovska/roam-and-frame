@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.modules.customer.exception;
+package com.roamandframe.coreapi.security;
 
 public class InvalidCredentialsException extends RuntimeException {
     public InvalidCredentialsException() {

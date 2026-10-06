@@ -1,4 +1,4 @@
-package com.roamandframe.coreapi.modules.customer.service;
+package com.roamandframe.coreapi.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

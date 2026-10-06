@@ -1,6 +1,6 @@
 package com.roamandframe.coreapi.modules.customer.repository;
 
-import com.roamandframe.coreapi.modules.customer.model.Customer;
+import com.roamandframe.coreapi.modules.customer.model.CustomerAccount;
 import com.roamandframe.coreapi.modules.customer.model.CustomerProfile;
 import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
 import org.springframework.stereotype.Component;
@@ -18,13 +18,9 @@ class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Optional<CustomerCredentials> findCredentialsByEmail(String email) {
+    public Optional<CustomerAccount> findAccountByEmail(String email) {
         return jpaRepository.findByEmail(email)
-                .map(entity -> new CustomerCredentials(
-                        toCustomer(entity),
-                        entity.getPasswordHash()
-                        )
-                );
+                .map(e -> new CustomerAccount(e.getId(), e.getEmail(), e.getPasswordHash()));
     }
 
     @Override
@@ -38,15 +34,6 @@ class CustomerRepositoryImpl implements CustomerRepository {
             entity.updateProfile(command);
             return toProfile(entity);
         });
-    }
-
-    private Customer toCustomer(CustomerJpaEntity entity) {
-        return new Customer(
-                        entity.getId(),
-                        entity.getEmail(),
-                        entity.getFirstName(),
-                        entity.getLastName()
-                );
     }
 
     private CustomerProfile toProfile(CustomerJpaEntity e) {
