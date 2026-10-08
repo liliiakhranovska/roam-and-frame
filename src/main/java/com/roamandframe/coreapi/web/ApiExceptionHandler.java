@@ -1,5 +1,6 @@
 package com.roamandframe.coreapi.web;
 
+import com.roamandframe.coreapi.modules.catalog.exception.ProductNotFoundException;
 import com.roamandframe.coreapi.modules.customer.exception.CustomerNotFoundException;
 import com.roamandframe.coreapi.security.exception.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,13 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     ProblemDetail handleCustomerNotFound(CustomerNotFoundException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("Customer not found");
+        return problem;
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    ProblemDetail handleProductNotFound(ProductNotFoundException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        problem.setTitle("Product not found");
         return problem;
     }
 }

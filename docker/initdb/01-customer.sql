@@ -22,3 +22,6 @@ CREATE TABLE customer.customers (
                                     created_at      timestamptz NOT NULL DEFAULT now(),
                                     updated_at      timestamptz NOT NULL DEFAULT now()
 );
+
+INSERT INTO customer.customers (email, password_hash, first_name, last_name)
+VALUES ('lily.swan@gmail.com', customer.hash_pass('password'), 'Lily', 'Swan');

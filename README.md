@@ -22,6 +22,7 @@
 2. Run `Application` in IntelliJ - Spring Boot Docker Compose support runs `docker compose up`
    for `compose.yaml`, waits for Postgres, and configures the datasource automatically
 3. Check: `curl localhost:8080/actuator/health` → `{"status":"UP"}` (includes a DB check)
+4. API docs: http://localhost:8080/swagger-ui.html (raw OpenAPI JSON: http://localhost:8080/v3/api-docs)
 
 Stopping the app also stops the Postgres container (default `start-and-stop` lifecycle).
 Data survives in the `pgdata` volume.
