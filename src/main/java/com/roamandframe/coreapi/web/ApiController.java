@@ -1,7 +1,7 @@
 package com.roamandframe.coreapi.web;
 
 import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
-import com.roamandframe.coreapi.modules.customer.service.CustomerProfileService;
+import com.roamandframe.coreapi.modules.customer.service.CustomerService;
 import com.roamandframe.coreapi.security.AuthenticationService;
 import com.roamandframe.coreapi.security.CurrentCustomerId;
 import com.roamandframe.coreapi.web.dto.AuthenticationRequest;
@@ -18,12 +18,12 @@ import java.util.UUID;
 public class ApiController {
 
     private final AuthenticationService authenticationService;
-    private final CustomerProfileService customerProfileService;
+    private final CustomerService customerService;
 
     public ApiController(AuthenticationService authenticationService,
-                         CustomerProfileService customerProfileService) {
+                         CustomerService customerService) {
         this.authenticationService = authenticationService;
-        this.customerProfileService = customerProfileService;
+        this.customerService = customerService;
     }
 
     @PostMapping("/auth/token")
@@ -34,7 +34,7 @@ public class ApiController {
 
     @GetMapping("/customers/me")
     public ProfileResponse getProfile(@CurrentCustomerId UUID customerId) {
-        return ProfileResponse.from(customerProfileService.getProfile(customerId));
+        return ProfileResponse.from(customerService.getProfile(customerId));
     }
 
     @PutMapping("/customers/me")
@@ -44,6 +44,6 @@ public class ApiController {
                 request.firstName(), request.lastName(), request.phone(),
                 request.addressLine1(), request.addressLine2(), request.city(),
                 request.region(), request.postalCode(), request.countryCode());
-        return ProfileResponse.from(customerProfileService.updateProfile(customerId, command));
+        return ProfileResponse.from(customerService.updateProfile(customerId, command));
     }
 }
