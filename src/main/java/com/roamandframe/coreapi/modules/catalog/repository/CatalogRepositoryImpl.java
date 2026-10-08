@@ -5,6 +5,7 @@ import com.roamandframe.coreapi.modules.catalog.model.ProductSummary;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,11 @@ class  CatalogRepositoryImpl implements CatalogRepository {
     @Override
     public Optional<Product> findBySku(String sku) {
         return productJpaRepository.findBySku(sku).map(this::toProduct);
+    }
+
+    @Override
+    public List<Product> findBySkus(Collection<String> skus) {
+        return productJpaRepository.findBySkuIn(skus).stream().map(this::toProduct).toList();
     }
 
     private ProductSummary toSummary(ProductJpaEntity e) {

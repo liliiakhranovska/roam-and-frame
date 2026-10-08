@@ -1,5 +1,6 @@
 package com.roamandframe.coreapi.web;
 
+import com.roamandframe.coreapi.modules.cart.service.CartService;
 import com.roamandframe.coreapi.modules.catalog.service.CatalogService;
 import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
 import com.roamandframe.coreapi.modules.customer.service.CustomerService;
@@ -7,13 +8,16 @@ import com.roamandframe.coreapi.security.AuthenticationService;
 import com.roamandframe.coreapi.security.CurrentCustomerId;
 import com.roamandframe.coreapi.web.dto.AuthenticationRequest;
 import com.roamandframe.coreapi.web.dto.AuthenticationResponse;
+import com.roamandframe.coreapi.web.dto.CartResponse;
 import com.roamandframe.coreapi.web.dto.ProductResponse;
 import com.roamandframe.coreapi.web.dto.ProductSummaryResponse;
+import com.roamandframe.coreapi.web.dto.SetCartItemQuantityRequest;
 import com.roamandframe.coreapi.web.dto.ProfileResponse;
 import com.roamandframe.coreapi.web.dto.UpdateProfileRequest;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,13 +30,16 @@ public class ApiController {
     private final AuthenticationService authenticationService;
     private final CustomerService customerService;
     private final CatalogService catalogService;
+    private final CartService cartService;
 
     public ApiController(AuthenticationService authenticationService,
                          CustomerService customerService,
-                         CatalogService catalogService) {
+                         CatalogService catalogService,
+                         CartService cartService) {
         this.authenticationService = authenticationService;
         this.customerService = customerService;
         this.catalogService = catalogService;
+        this.cartService = cartService;
     }
 
     @Tag(name = "Auth")
@@ -74,5 +81,26 @@ public class ApiController {
     @GetMapping("/products/{sku}")
     public ProductResponse getProduct(@PathVariable String sku) {
         return ProductResponse.from(catalogService.getProduct(sku));
+    }
+
+    @Tag(name = "Cart")
+    @GetMapping("/cart")
+    public CartResponse getCart(@CurrentCustomerId UUID customerId) {
+        return CartResponse.from(cartService.getCart(customerId));
+    }
+
+    @Tag(name = "Cart")
+    @DeleteMapping("/cart")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearCart(@CurrentCustomerId UUID customerId) {
+        cartService.clearCart(customerId);
+    }
+
+    @Tag(name = "Cart")
+    @PutMapping("/cart/items/{sku}")
+    public CartResponse setCartItemQuantity(@CurrentCustomerId UUID customerId,
+                                            @PathVariable String sku,
+                                            @Valid @RequestBody SetCartItemQuantityRequest request) {
+        return CartResponse.from(cartService.setItemQuantity(customerId, sku, request.quantity()));
     }
 }

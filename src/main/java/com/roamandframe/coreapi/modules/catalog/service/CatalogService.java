@@ -9,8 +9,10 @@ import com.roamandframe.coreapi.modules.inventory.service.InventoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class CatalogService {
@@ -32,6 +34,16 @@ public class CatalogService {
                 .map(p -> new WithStock<>(p, quantities.get(p.sku())))
                 .filter(p -> inStock == null || (p.quantity() > 0) == inStock)
                 .toList();
+    }
+
+    /** Products by SKU with their stock; SKUs that do not exist are absent from the result. */
+    @Transactional(readOnly = true)
+    public Map<String, WithStock<Product>> getProducts(Collection<String> skus) {
+        List<Product> products = catalogRepository.findBySkus(skus);
+        Map<String, Integer> quantities = inventoryService.getQuantities(
+                products.stream().map(Product::sku).toList());
+        return products.stream().collect(Collectors.toMap(
+                Product::sku, p -> new WithStock<>(p, quantities.get(p.sku()))));
     }
 
     @Transactional(readOnly = true)

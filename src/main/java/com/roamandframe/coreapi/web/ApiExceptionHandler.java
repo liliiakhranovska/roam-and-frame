@@ -1,5 +1,6 @@
 package com.roamandframe.coreapi.web;
 
+import com.roamandframe.coreapi.modules.cart.exception.InsufficientStockException;
 import com.roamandframe.coreapi.modules.catalog.exception.ProductNotFoundException;
 import com.roamandframe.coreapi.modules.customer.exception.CustomerNotFoundException;
 import com.roamandframe.coreapi.security.exception.InvalidCredentialsException;
@@ -30,6 +31,13 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     ProblemDetail handleProductNotFound(ProductNotFoundException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problem.setTitle("Product not found");
+        return problem;
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    ProblemDetail handleInsufficientStock(InsufficientStockException ex) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        problem.setTitle("Insufficient stock");
         return problem;
     }
 }
