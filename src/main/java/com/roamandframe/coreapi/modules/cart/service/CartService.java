@@ -1,6 +1,8 @@
 package com.roamandframe.coreapi.modules.cart.service;
 
+import com.roamandframe.coreapi.modules.cart.exception.EmptyCartException;
 import com.roamandframe.coreapi.modules.cart.exception.InsufficientStockException;
+import com.roamandframe.coreapi.modules.cart.exception.InvalidCartException;
 import com.roamandframe.coreapi.modules.cart.model.Cart;
 import com.roamandframe.coreapi.modules.cart.model.CartItem;
 import com.roamandframe.coreapi.modules.cart.model.CartLine;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -47,13 +50,34 @@ public class CartService {
         return buildCart(customerId);
     }
 
+    /**
+     * Locks the customer's cart rows (so a second checkout waits for the first) and checks that the cart
+     * is not empty, every product still exists and enough stock is available. Returns the validated cart.
+     */
+    @Transactional
+    public Cart validateCart(UUID customerId) {
+        List<CartItem> items = cartRepository.findItemsForUpdate(customerId);
+        if (items.isEmpty()) {
+            throw new EmptyCartException();
+        }
+        Cart cart = toCart(items);
+        List<String> problems = cart.lines().stream().map(this::problemOf).filter(Objects::nonNull).toList();
+        if (!problems.isEmpty()) {
+            throw new InvalidCartException(problems);
+        }
+        return cart;
+    }
+
     @Transactional
     public void clearCart(UUID customerId) {
         cartRepository.deleteAll(customerId);
     }
 
     private Cart buildCart(UUID customerId) {
-        List<CartItem> items = cartRepository.findItems(customerId);
+        return toCart(cartRepository.findItems(customerId));
+    }
+
+    private Cart toCart(List<CartItem> items) {
         Map<String, WithStock<Product>> products = items.isEmpty()
                 ? Map.of()
                 : catalogService.getProducts(items.stream().map(CartItem::sku).toList());
@@ -64,6 +88,16 @@ public class CartService {
                 .filter(t -> t != null)
                 .reduce(BigDecimal.ZERO.setScale(2), BigDecimal::add);
         return new Cart(lines, total);
+    }
+
+    private String problemOf(CartLine line) {
+        if (line.name() == null) {
+            return line.sku() + ": product is no longer available";
+        }
+        if (line.quantity() > line.availableQuantity()) {
+            return line.sku() + ": requested " + line.quantity() + ", available " + line.availableQuantity();
+        }
+        return null;
     }
 
     private CartLine toLine(CartItem item, WithStock<Product> product) {

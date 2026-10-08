@@ -23,6 +23,13 @@ class CartRepositoryImpl implements CartRepository {
     }
 
     @Override
+    public List<CartItem> findItemsForUpdate(UUID customerId) {
+        return jpaRepository.findForUpdateByCustomerId(customerId).stream()
+                .map(this::toItem)
+                .toList();
+    }
+
+    @Override
     public void saveItem(UUID customerId, String sku, int quantity) {
         jpaRepository.findByCustomerIdAndSku(customerId, sku).ifPresentOrElse(
                 entity -> entity.setQuantity(quantity),

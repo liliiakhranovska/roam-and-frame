@@ -23,5 +23,7 @@ CREATE TABLE customer.customers (
                                     updated_at      timestamptz NOT NULL DEFAULT now()
 );
 
-INSERT INTO customer.customers (email, password_hash, first_name, last_name)
-VALUES ('lily.swan@gmail.com', customer.hash_pass('password'), 'Lily', 'Swan');
+INSERT INTO customer.customers (email, password_hash, first_name, last_name,
+                                address_line1, city, region, postal_code, country_code)
+VALUES ('lily.swan@gmail.com', customer.hash_pass('password'), 'Lily', 'Swan',
+        '12 Nezalezhnosti', 'Odesa', 'Odesa', '00678', 'UA');

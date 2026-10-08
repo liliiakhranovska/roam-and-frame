@@ -2,13 +2,16 @@ package com.roamandframe.coreapi.web;
 
 import com.roamandframe.coreapi.modules.cart.service.CartService;
 import com.roamandframe.coreapi.modules.catalog.service.CatalogService;
+import com.roamandframe.coreapi.modules.checkout.service.CheckoutService;
 import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
 import com.roamandframe.coreapi.modules.customer.service.CustomerService;
+import com.roamandframe.coreapi.modules.order.service.OrderService;
 import com.roamandframe.coreapi.security.AuthenticationService;
 import com.roamandframe.coreapi.security.CurrentCustomerId;
 import com.roamandframe.coreapi.web.dto.AuthenticationRequest;
 import com.roamandframe.coreapi.web.dto.AuthenticationResponse;
 import com.roamandframe.coreapi.web.dto.CartResponse;
+import com.roamandframe.coreapi.web.dto.OrderResponse;
 import com.roamandframe.coreapi.web.dto.ProductResponse;
 import com.roamandframe.coreapi.web.dto.ProductSummaryResponse;
 import com.roamandframe.coreapi.web.dto.SetCartItemQuantityRequest;
@@ -31,15 +34,21 @@ public class ApiController {
     private final CustomerService customerService;
     private final CatalogService catalogService;
     private final CartService cartService;
+    private final CheckoutService checkoutService;
+    private final OrderService orderService;
 
     public ApiController(AuthenticationService authenticationService,
                          CustomerService customerService,
                          CatalogService catalogService,
-                         CartService cartService) {
+                         CartService cartService,
+                         CheckoutService checkoutService,
+                         OrderService orderService) {
         this.authenticationService = authenticationService;
         this.customerService = customerService;
         this.catalogService = catalogService;
         this.cartService = cartService;
+        this.checkoutService = checkoutService;
+        this.orderService = orderService;
     }
 
     @Tag(name = "Auth")
@@ -102,5 +111,20 @@ public class ApiController {
                                             @PathVariable String sku,
                                             @Valid @RequestBody SetCartItemQuantityRequest request) {
         return CartResponse.from(cartService.setItemQuantity(customerId, sku, request.quantity()));
+    }
+
+    @Tag(name = "Checkout")
+    @PostMapping("/checkout")
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrderResponse checkout(@CurrentCustomerId UUID customerId) {
+        return OrderResponse.from(checkoutService.checkout(customerId));
+    }
+
+    @Tag(name = "Order")
+    @GetMapping("/orders")
+    public List<OrderResponse> getOrders(@CurrentCustomerId UUID customerId) {
+        return orderService.getOrders(customerId).stream()
+                .map(OrderResponse::from)
+                .toList();
     }
 }

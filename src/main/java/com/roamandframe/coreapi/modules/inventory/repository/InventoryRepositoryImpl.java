@@ -21,4 +21,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
         return jpaRepository.findAllById(skus).stream()
                 .collect(Collectors.toMap(StockItemJpaEntity::getSku, StockItemJpaEntity::getQuantity));
     }
+
+    @Override
+    public boolean reserve(String sku, int quantity) {
+        return jpaRepository.reserve(sku, quantity) > 0;
+    }
 }

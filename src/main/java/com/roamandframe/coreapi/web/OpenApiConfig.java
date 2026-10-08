@@ -18,7 +18,7 @@ import java.util.TreeMap;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(title = "Roam & Frame Core API", version = "v1"),
-        tags = {@Tag(name = "Auth"), @Tag(name = "Customer"), @Tag(name = "Catalog"), @Tag(name = "Cart")},
+        tags = {@Tag(name = "Auth"), @Tag(name = "Customer"), @Tag(name = "Catalog"), @Tag(name = "Cart"), @Tag(name = "Checkout"), @Tag(name = "Order")},
         security = @SecurityRequirement(name = "bearerAuth"))
 @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 class OpenApiConfig {
