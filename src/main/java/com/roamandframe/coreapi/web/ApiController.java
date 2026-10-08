@@ -63,8 +63,9 @@ public class ApiController {
     @Tag(name = "Catalog")
     @GetMapping("/products")
     public List<ProductSummaryResponse> searchProducts(@RequestParam(required = false) String category,
-                                                       @RequestParam(required = false) String brand) {
-        return catalogService.searchProducts(category, brand).stream()
+                                                       @RequestParam(required = false) String brand,
+                                                       @RequestParam(required = false) Boolean inStock) {
+        return catalogService.searchProducts(category, brand, inStock).stream()
                 .map(ProductSummaryResponse::from)
                 .toList();
     }
