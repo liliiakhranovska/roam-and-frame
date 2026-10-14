@@ -14,7 +14,7 @@
 - **Working directory: `$PROJECT_DIR$`** - Spring looks for `compose.yaml` in the working directory,
   and it lives in the repo root
 - **VM options: `-Duser.timezone=UTC`**
-- **Env variables: specify JWT_SECRET**
+- **Env variables: specify JWT_SECRET** (Spring Boot configuration) and **DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD** (Script configuarion)
 
 ## Local start
 
@@ -35,6 +35,21 @@ Data survives in the `pgdata` volume.
 | Database | roamandframe   |
 | User     | roamandframe   |
 | Password | roamandframe   |
+
+## Database schema and sample data
+
+**Schema** is managed by Flyway. Migrations live in `src/main/resources/db/migration`
+(`V<n>__description.sql`) and are applied automatically when the app starts. Never edit a migration
+that has already run - add a new `V<n+1>__...sql` instead. Hibernate only validates the schema
+(`ddl-auto=validate`), it never changes it.
+
+Sample data:
+- `database/seed/seed.sh` - loads the CSVs; safe to run repeatedly (existing rows are skipped)
+- `database/cleanup/cleanup.sh` - deletes **all** application data, keeps the schema
+
+Full reset: `docker compose down -v`, then start the app (Flyway recreates the schema), then `seed.sh`.
+
+When adding a table in a new migration, add it to `database/cleanup/cleanup.sql` as well.
 
 Useful commands (run from the repo root):
 - `docker compose ps` - is the container running?

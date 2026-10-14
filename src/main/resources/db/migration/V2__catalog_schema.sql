@@ -22,26 +22,3 @@ CREATE TABLE catalog.products (
 );
 
 CREATE INDEX products_category_id_idx ON catalog.products (category_id);
-
-COPY catalog.categories (code, name, description)
-    FROM '/docker-entrypoint-initdb.d/data/categories.csv' WITH (FORMAT csv, HEADER true);
-
-CREATE TEMP TABLE products_staging (
-    sku           varchar(64),
-    name          varchar(255),
-    description   text,
-    category_code varchar(100),
-    brand         varchar(100),
-    price         numeric(10, 2),
-    attributes    jsonb
-);
-
-COPY products_staging
-    FROM '/docker-entrypoint-initdb.d/data/products.csv' WITH (FORMAT csv, HEADER true);
-
-INSERT INTO catalog.products (sku, name, description, category_id, brand, price, attributes)
-SELECT s.sku, s.name, s.description, c.id, s.brand, s.price, s.attributes
-FROM products_staging s
-         JOIN catalog.categories c ON c.code = s.category_code;
-
-DROP TABLE products_staging;

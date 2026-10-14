@@ -18,12 +18,7 @@ CREATE TABLE customer.customers (
                                     city            varchar(100),
                                     region          varchar(100),
                                     postal_code     varchar(20),
-                                    country_code    char(2),
+                                    country_code    varchar(2),
                                     created_at      timestamptz NOT NULL DEFAULT now(),
                                     updated_at      timestamptz NOT NULL DEFAULT now()
 );
-
-INSERT INTO customer.customers (email, password_hash, first_name, last_name,
-                                address_line1, city, region, postal_code, country_code)
-VALUES ('lily.swan@gmail.com', customer.hash_pass('password'), 'Lily', 'Swan',
-        '12 Nezalezhnosti', 'Odesa', 'Odesa', '00678', 'UA');
