@@ -28,6 +28,6 @@ class AuthenticationServiceImpl implements AuthenticationService {
         if (!passwordHasher.matches(rawPassword, account.passwordHash())) {
             throw new InvalidCredentialsException();
         }
-        return tokenIssuer.issueToken(account.id(), account.email());
+        return tokenIssuer.issueToken(account.id(), account.email(), account.role());
     }
 }

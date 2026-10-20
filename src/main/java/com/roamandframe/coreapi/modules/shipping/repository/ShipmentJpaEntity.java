@@ -51,4 +51,7 @@ class ShipmentJpaEntity {
     UUID getCustomerId() { return customerId; }
     ShipmentStatus getStatus() { return status; }
     String getTrackingNumber() { return trackingNumber; }
+    void ship() {
+        this.status = ShipmentStatus.SHIPPED;
+    }
 }

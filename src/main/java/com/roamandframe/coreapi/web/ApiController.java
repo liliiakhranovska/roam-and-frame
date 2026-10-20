@@ -22,6 +22,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.roamandframe.coreapi.modules.order.model.OrderDetails;
+import com.roamandframe.coreapi.modules.order.model.OrderFilter;
+import com.roamandframe.coreapi.modules.order.model.OrderStatus;
+import com.roamandframe.coreapi.web.dto.AdminOrderResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.server.ResponseStatusException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Map;
+import java.util.Set;
 
 import java.util.List;
 import java.util.UUID;
@@ -125,6 +138,46 @@ public class ApiController {
     public List<OrderResponse> getOrders(@CurrentCustomerId UUID customerId) {
         return orderService.getOrders(customerId).stream()
                 .map(OrderResponse::from)
+                .toList();
+    }
+
+    @Tag(name = "Admin")
+    @Operation(summary = "Search orders of all customers",
+            description = "Newest first, at most 500 results. All parameters are optional and combined with AND. "
+                    + "In-flight orders have status PLACED, past orders have status SHIPPED. "
+                    + "from/to are dates (UTC) of the order creation, both inclusive. Requires the ADMIN role.")
+    @GetMapping("/admin/orders")
+    public List<AdminOrderResponse> searchOrders(
+            @RequestParam(required = false) UUID customerId,
+            @Parameter(description = "Repeat to match several statuses, e.g. status=PLACED&status=SHIPPED")
+            @RequestParam(required = false) Set<OrderStatus> status,
+            @Parameter(description = "First day, inclusive (yyyy-MM-dd, UTC)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @Parameter(description = "Last day, inclusive (yyyy-MM-dd, UTC)")
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+        if (from != null && to != null && to.isBefore(from)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "'to' must not be before 'from'");
+        }
+        Instant createdFrom = from == null ? null : from.atStartOfDay(ZoneOffset.UTC).toInstant();
+        Instant createdBefore = to == null ? null : to.plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant();
+
+        return toAdminResponses(orderService.searchOrders(new OrderFilter(customerId, status, createdFrom, createdBefore)));
+    }
+
+    @Tag(name = "Admin")
+    @Operation(summary = "Mark an order as shipped",
+            description = "Sets the order and its shipment to SHIPPED. Idempotent: an already shipped order "
+                    + "is returned unchanged. Requires the ADMIN role.")
+    @PostMapping("/admin/orders/{orderId}/ship")
+    public AdminOrderResponse shipOrder(@PathVariable UUID orderId) {
+        return toAdminResponses(List.of(orderService.markShipped(orderId))).getFirst();
+    }
+
+    private List<AdminOrderResponse> toAdminResponses(List<OrderDetails> orders) {
+        Map<UUID, String> emails = customerService.findEmails(
+                orders.stream().map(d -> d.order().customerId()).distinct().toList());
+        return orders.stream()
+                .map(d -> AdminOrderResponse.from(d, emails.get(d.order().customerId())))
                 .toList();
     }
 }

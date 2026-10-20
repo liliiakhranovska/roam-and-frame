@@ -12,4 +12,6 @@ public interface ShippingService {
     Shipment initiate(UUID orderId, UUID customerId);
 
     Map<UUID, Shipment> findByOrderIds(Collection<UUID> orderIds);
+
+    void markShipped(UUID orderId);
 }

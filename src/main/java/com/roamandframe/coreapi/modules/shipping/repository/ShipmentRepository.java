@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface ShipmentRepository {
     Shipment create(UUID orderId, UUID customerId, String trackingNumber);
     List<Shipment> findByOrderIds(Collection<UUID> orderIds);
+    void markShipped(UUID orderId);
 }

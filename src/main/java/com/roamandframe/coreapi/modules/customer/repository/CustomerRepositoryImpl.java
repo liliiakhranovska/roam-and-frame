@@ -5,8 +5,11 @@ import com.roamandframe.coreapi.modules.customer.model.CustomerProfile;
 import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 class CustomerRepositoryImpl implements CustomerRepository {
@@ -20,7 +23,7 @@ class CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public Optional<CustomerAccount> findAccountByEmail(String email) {
         return jpaRepository.findByEmail(email)
-                .map(e -> new CustomerAccount(e.getId(), e.getEmail(), e.getPasswordHash()));
+                .map(e -> new CustomerAccount(e.getId(), e.getEmail(), e.getPasswordHash(), e.getRole()));
     }
 
     @Override
@@ -34,6 +37,12 @@ class CustomerRepositoryImpl implements CustomerRepository {
             entity.updateProfile(command);
             return toProfile(entity);
         });
+    }
+
+    @Override
+    public Map<UUID, String> findEmailsByIds(Collection<UUID> ids) {
+        return jpaRepository.findAllById(ids).stream()
+                .collect(Collectors.toMap(CustomerJpaEntity::getId, CustomerJpaEntity::getEmail));
     }
 
     private CustomerProfile toProfile(CustomerJpaEntity e) {

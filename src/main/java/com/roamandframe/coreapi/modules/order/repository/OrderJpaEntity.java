@@ -58,6 +58,16 @@ class OrderJpaEntity {
     }
 
     Order toModel() {
-        return new Order(id, status, total, createdAt, items.stream().map(OrderItemJpaEntity::toModel).toList());
+        return new Order(id, customerId, status, total, createdAt, items.stream().map(OrderItemJpaEntity::toModel).toList());
     }
+
+    boolean ship() {
+        if (status == OrderStatus.SHIPPED) {
+            return false;
+        }
+        status = OrderStatus.SHIPPED;
+        return true;
+    }
+
+    UUID getId() { return id; }
 }

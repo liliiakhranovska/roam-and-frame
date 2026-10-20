@@ -48,6 +48,12 @@ class ShippingServiceImpl implements ShippingService {
                 .collect(Collectors.toMap(Shipment::orderId, Function.identity()));
     }
 
+    @Transactional
+    @Override
+    public void markShipped(UUID orderId) {
+        shipmentRepository.markShipped(orderId);
+    }
+
     private DeliveryAddress deliveryAddressOf(UUID customerId) {
         CustomerProfile p = customerService.getProfile(customerId);
         List<String> missing = new ArrayList<>();

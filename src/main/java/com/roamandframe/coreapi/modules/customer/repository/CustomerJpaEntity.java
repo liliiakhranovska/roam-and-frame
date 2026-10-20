@@ -5,6 +5,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import com.roamandframe.coreapi.modules.customer.model.CustomerRole;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -51,6 +54,11 @@ class CustomerJpaEntity {
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CustomerRole role;
+    CustomerRole getRole() { return role; }
 
     protected CustomerJpaEntity() {
     }

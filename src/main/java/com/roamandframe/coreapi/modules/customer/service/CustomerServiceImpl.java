@@ -7,6 +7,9 @@ import com.roamandframe.coreapi.modules.customer.model.UpdateProfileCommand;
 import com.roamandframe.coreapi.modules.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,5 +40,11 @@ class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<CustomerAccount> findAccountByEmail(String email) {
         return customerRepository.findAccountByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Map<UUID, String> findEmails(Collection<UUID> customerIds) {
+        return customerRepository.findEmailsByIds(customerIds);
     }
 }

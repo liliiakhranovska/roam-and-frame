@@ -29,4 +29,9 @@ class ShipmentRepositoryImpl implements ShipmentRepository {
     private Shipment toShipment(ShipmentJpaEntity e) {
         return new Shipment(e.getId(), e.getOrderId(), e.getCustomerId(), e.getStatus(), e.getTrackingNumber());
     }
+
+    @Override
+    public void markShipped(UUID orderId) {
+        jpaRepository.findByOrderId(orderId).ifPresent(ShipmentJpaEntity::ship);
+    }
 }

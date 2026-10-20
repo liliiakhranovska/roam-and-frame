@@ -11,14 +11,15 @@ CREATE TEMP TABLE customers_staging (
     city          varchar(100),
     region        varchar(100),
     postal_code   varchar(20),
-    country_code  varchar(2)
+    country_code  varchar(2),
+    role          varchar(20)
 ) ON COMMIT DROP;
 
-\copy customers_staging (email, password, first_name, last_name, phone, address_line1, address_line2, city, region, postal_code, country_code) FROM 'database/seed/data/customers.csv' WITH (FORMAT csv, HEADER true)
+\copy customers_staging (email, password, first_name, last_name, phone, address_line1, address_line2, city, region, postal_code, country_code, role) FROM 'database/seed/data/customers.csv' WITH (FORMAT csv, HEADER true)
 
     INSERT INTO customer.customers
     (email, password_hash, first_name, last_name, phone,
-    address_line1, address_line2, city, region, postal_code, country_code)
+    address_line1, address_line2, city, region, postal_code, country_code, role)
 SELECT lower(email),
        customer.hash_pass(password),
        first_name,
@@ -29,7 +30,8 @@ SELECT lower(email),
        city,
        region,
        postal_code,
-       country_code
+       country_code,
+       role
 FROM customers_staging
     ON CONFLICT (email) DO NOTHING;
 
